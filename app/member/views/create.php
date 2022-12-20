@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thrifty - Login</title>
+    <title>Thrifty - Register Member</title>
    
     <!-- styles and fonts -->
     <link rel="stylesheet" href="/thriftapp/public/css/index.css">
@@ -15,19 +15,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
+    <?php require_once "../app/partials/header.php"?>
     <main class="flex w-full h-[100vh] py-4">
-        <!-- Login Image -->
-        <section class="h-[100vh] w-[45vw] fixed">
-            <p class="text-4xl font-black mx-4 text-[#A555EC]">Thrifty</p>
-            <img src="/thriftapp/public/assets/images/login.jpg" alt="login-img" class="side-img">
-        </section>
-
-        <!-- Login form -->
-        <section class="ml-[45vw] w-full h-full">
+        <!-- Registration form -->
+        <section class="mx-auto w-2/3 h-full">
             <form action="/thriftapp/public/member/login" method="post">
                 <div class="form-inputs">
-                    <p class="text-lg">Welcome Back!</p>
-                 <h2 class="text-2xl font-bold text-[#5a185a]">Admin Login</h2>
+                 <h2 class="text-2xl font-bold text-[#5a185a]">Register member</h2>
                  <?php if(isset($data['error'])): ?>
                     <div class="error">
                         <p><?= $data['error'] ?></p>

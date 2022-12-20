@@ -55,3 +55,16 @@ form {
   height: 90%;
   text-align: center;
 }
+
+div.error {
+  background-color: rgb(237, 72, 72);
+  width: 80%;
+  max-width: 400px;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+  text-align: center;
+  color: white;
+  margin-inline: auto;
+}

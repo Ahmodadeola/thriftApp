@@ -1,4 +1,4 @@
-<?php require_once "../utils/helperFuncs.php";
+<?php require_once "../app/utils/helperFuncs.php";
     require_once "../app/init.php";
     $app = new App;
     // echo "Hello everyone!";

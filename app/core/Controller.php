@@ -1,4 +1,4 @@
-<?php
+<?php require_once "../app/configs/dbConfig.php";
 
 class Controller {
     public function index(){
