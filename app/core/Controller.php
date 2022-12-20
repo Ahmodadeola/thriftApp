@@ -13,4 +13,5 @@ class Controller {
     public function view($page, $data=[]){
         require_once("../app/$page.php");
     }
+
 }

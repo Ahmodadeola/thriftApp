@@ -24,7 +24,7 @@
 
         <!-- Login form -->
         <section class="ml-[45vw] w-full h-full">
-            <form action="/thriftapp/public/member/login" method="post">
+            <form action="/thriftapp/public/home/login" method="post">
                 <div class="form-inputs">
                     <p class="text-lg">Welcome Back!</p>
                  <h2 class="text-2xl font-bold text-[#5a185a]">Admin Login</h2>

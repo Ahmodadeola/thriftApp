@@ -113,9 +113,8 @@ const validateFields = () => {
     }
   }
   if (
-    (!("doesThrift" in formData) || doesThrift === "true") &&
-    isAdmin !== "true" &&
-    !groups
+    !groups &&
+    (!isAdmin !== "true" || (isAdmin === "true" && doesThrift === "true"))
   ) {
     if (!groups) {
       addErrorMessage("Select a group", "#groups");

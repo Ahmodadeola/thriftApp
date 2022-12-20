@@ -1,5 +1,4 @@
 <?php require_once "member.repository.php";
-require_once "../app/configs/dbConfig.php";
 
 class Member extends Controller {
         private $userRepo;
@@ -11,12 +10,12 @@ class Member extends Controller {
         }
 
         public function index($name="default", $rest=""){
-            $this->view("member/views/index", ['name'=> $name]);
+            $this->authenticate();
+            $this->view("member/views/members", ['name'=> $name]);
         }
 
         public function create(){
-         
-        //    var_dump($user);
+            $this->authenticate();
            if(isset($_POST['submit'])){
                 $errors = [];
 
@@ -99,46 +98,18 @@ class Member extends Controller {
            }
         }
 
-        public function login(){
-            // check for form submission
-            if(isset($_POST['submit'])){
-                $emailErr = $passwordErr = "";
+        public function logout(){
+            session_start();
 
-                // escape and validate email 
-                if(isset($_POST['email'])){
-                    $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-                    if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
-                        $emailErr = "Provide a valid email";
-                    }
-                }else{
-                    $emailErr = "Provide a valid email";
-                }
-
-                  // escape password 
-                if(isset($_POST['password'])){
-                    $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-                }else{
-                    $passwordErr = "Password cannot be empty";
-                }
-
-                echo "$emailErr" . " $passwordErr";
-                if($emailErr || $passwordErr){
-                    $this->view('home/views/login', ['error'=> 'Provide valid email and password']);
-  
-                }
-                // find the user with login credentials
-                $user = $this->userRepo->findByEmail($email);
-                $isValidUser = $user? password_verify($password, $user['password']) : false;
-
-
-                // return to login if user is not found
-                if(!$isValidUser){
-                    $this->view('home/views/login', ['error'=> 'Incorrect email or password']);
-                }
-            }else{
-               $this->view('home/views/login', ['error'=> 'Provide login credentials']);
-            }
+            session_destroy();
+            var_dump($_SESSION);
+            header("Location: /thriftapp/public");
         }
 
+        public function authenticate(){
+            session_start();
+            $isLoggedIn = isset($_SESSION['email']);
+            if(!$isLoggedIn)  header("Location: /thriftapp/public");
+        }
 
 }
