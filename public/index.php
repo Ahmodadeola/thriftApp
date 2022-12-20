@@ -1,0 +1,10 @@
+<?php require_once "../utils/helperFuncs.php";
+    require_once "../app/init.php";
+    $app = new App;
+    // echo "Hello everyone!";
+    // $url = $_SERVER['PHP_SELF'];
+    // $path = explode('/', $url);
+    // // printArrayItems($$path);
+    // // printArrayItems($path);
+    // echo "<br />";
+    // echo ;
