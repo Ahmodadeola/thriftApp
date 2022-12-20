@@ -7,8 +7,8 @@
     <title>Thrifty - Login</title>
    
     <!-- styles and fonts -->
-    <link rel="stylesheet" href="/thriftapp/public/css/index.css">
     <link rel="stylesheet" href="/thriftapp/public/css/login.css">
+    <link rel="stylesheet" href="/thriftapp/public/css/index.css">
     <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">  
     
     <!-- js scripts -->
