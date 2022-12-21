@@ -42,10 +42,10 @@ const handleParticipateSwitch = (e) => {
 const handleGroupSelect = () => {
   let formData = getFormValues();
   const selectedGroups = Object.entries(formData).filter(([key, value]) =>
-    key.toLowerCase().startsWith("group")
+    key.toLowerCase().startsWith("group-")
   );
   const values = selectedGroups.map(([key, value]) => value);
-  console.log({ values });
+  // console.log({ values, formData });
 
   groupValueInput.value = values;
 };
@@ -114,12 +114,13 @@ const validateFields = () => {
   }
   if (
     !groups &&
-    (!isAdmin !== "true" || (isAdmin === "true" && doesThrift === "true"))
+    (isAdmin !== "true" || (isAdmin === "true" && doesThrift === "true"))
   ) {
     if (!groups) {
       addErrorMessage("Select a group", "#groups");
       isValid = false;
     }
   }
+  // console.log({ isValid });
   return isValid;
 };

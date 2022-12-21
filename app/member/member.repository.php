@@ -1,4 +1,4 @@
-<?php 
+<?php require_once "../app/models/User.php";
 
 class UserRepository {
     private $connect;
@@ -18,12 +18,35 @@ class UserRepository {
         $sql = "SELECT * FROM user WHERE user.email = '$email'";
         $result = mysqli_query($this->connect, $sql);
         $data = mysqli_fetch_all($result, MYSQLI_ASSOC);
-        return empty($data)? $data : $data['0'];
+        $user = null;
+        if(!empty($data)) {
+            $row = $data['0'];
+            $user = new User($row['firstName'], $row['lastName'], $email, $row['password'], $row['isAdmin'], $row['doesThrift'], false);
+            $user->setId($row['id']);
+            $user->setDateCreated($row['createdAt']);
+        }
+        return $user;
+    }
+
+    public function findAll(){
+        $sql = "SELECT * FROM user";
+        $result = mysqli_query($this->connect, $sql);
+        $data = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        $users = [];
+        if(!empty($data)) {
+            foreach($data as $row){
+                $user = new User($row['firstName'], $row['lastName'], $row['email'], $row['password'], $row['isAdmin'], $row['doesThrift']);
+                $user->setId($row['id']);
+                $user->setDateCreated($row['createdAt']);
+                array_push($users, $user);
+            }
+        }
+        return $users;
     }
 
     public function createUser($user){
         $firstName = $user->getFirstName();
-        $lastName = $user->getFirstName();
+        $lastName = $user->getLastName();
         $email = $user->getEmail();
         $password = $user->getPassword();
         $doesThrift = $user->doesThrift()? 1 : 0;

@@ -18,7 +18,7 @@
     <?php require_once "../app/partials/header.php"?>
     <main class="flex w-full py-4">
         <!-- Registration form -->
-        <section class="mx-auto w-2/3 h-full">
+        <section class="mx-auto w-2/3 h-full mt-[2rem]">
             <form action="/thriftapp/public/member/create" method="post" onsubmit="return validateFields()">
                 <div class="form-inputs mt-5">
                  <h2 class="text-2xl font-bold text-[#5a185a] text-center">Register member</h2>
@@ -52,7 +52,7 @@
                 <div class="input-div" id="groups">
                     <p for="group" class="text-gray-600">Select Group(s)</p>
                     <div class="grid grid-cols-3 gap-y-2 mt-3" id="groups-wrapper">
-                    <?php foreach(['Group-2000'=>1, 'Group-4000'=>2, 'Group-5000'=>3, 'Group-20000'=>4] as $label=>$value): ?>
+                    <?php foreach($data['groups'] as $label=>$value): ?>
                         <div>
                             <input type="checkbox" name="<?=$label?>" class="group-class" value="<?=$value?>"/>
                             <label for="<?=$label?>" class="text-[#828282]"><?=$label?></label>

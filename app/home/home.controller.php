@@ -43,7 +43,8 @@
                 }
                 // find the user with login credentials
                 $user = $this->userRepo->findByEmail($email);
-                $isValidUser = $user? password_verify($password, $user['password']) : false;
+                var_dump($user->getPassword());
+                $isValidUser = $user? password_verify($password, $user->getPassword()) : false;
 
 
                 // return to login if user is not found
@@ -52,9 +53,9 @@
                 }else{
                     session_start();
                     $_SESSION['email'] = $email;
-                    $_SESSION['firstName'] = $user['firstName'];
-                    $_SESSION['lastName'] = $user['lastName'];
-                    $_SESSION['id'] = $user['id'];
+                    $_SESSION['firstName'] = $user->getFirstName();
+                    $_SESSION['lastName'] = $user->getLastName();
+                    $_SESSION['id'] = $user->getId();
                     header("Location: /thriftapp/public/member");
                 }
             }else{

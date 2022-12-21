@@ -1,17 +1,34 @@
 <?php require_once "member.repository.php";
+require_once "../app/group/group.repository.php";
+require_once "../app/group/groupMember.repository.php";
+require_once "../app/models/GroupMember.php";
 
 class Member extends Controller {
         private $userRepo;
+        private $memberRepo;
 
         public function __construct() 
         {
             global $connect;
             $this->userRepo = new UserRepository($connect);
+            $this->memberRepo = new GroupMemberRepository($connect);
+            $this->groupRepo = new GroupRepository($connect);
         }
 
         public function index($name="default", $rest=""){
             $this->authenticate();
-            $this->view("member/views/members", ['name'=> $name]);
+            $members = $this->userRepo->findAll();
+            $allMembers = [];
+            foreach($members as $member){
+               array_push($allMembers, ['firstName'=>$member->getFirstName(), 
+               'lastName'=>$member->getLastName(), 
+               'email'=>$member->getEmail(), 
+               'isAdmin'=>$member->isAdmin()? 'Yes' : 'No', 
+               'doesThrift'=>$member->doesThrift()? 'Yes' : 'No', 
+               'dateCreated'=>$member->getDateCreated()
+            ]);
+            }
+            $this->view("member/views/members", ['members'=> $allMembers]);
         }
 
         public function create(){
@@ -27,13 +44,15 @@ class Member extends Controller {
                 if(isset($_POST['doesThrift'])){
                      $doesThrift = filter_input(INPUT_POST, 'doesThrift', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                     $doesThrift = $doesThrift === "true"? true : false;
-                } else $doesThrift = false;
+                } else $isAdmin? ($doesThrift = false) : ($doesThrift = true);
 
                 if(isset($_POST['groups'])){
                     $groups = filter_input(INPUT_POST, 'groups', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                     if(!$groups && $doesThrift)  array_push($errors,  "Provide thrift group(s)");
                     else if(!$doesThrift) $groups = [];
-                    else $groups = explode(',', $groups);  
+                    else $groups = array_filter(explode(',', $groups), function($group) {
+                        return !empty($group);
+                    });  
                 }else{
                     if($isAdmin && !$doesThrift){
                         $groups = [];
@@ -82,20 +101,43 @@ class Member extends Controller {
                     }
                 }
 
+                // return to create page if form contains error
                 if(count($errors) > 0) $this->view('member/views/create', ['errors'=> $errors]);
                 else{
+                    // create a new user row
                     $args = [$firstName, $lastName, $email, $password, $isAdmin, $doesThrift];
+                    var_dump($args);
                     $user= $this->model('User', $args);
                     $newUser = $this->userRepo->createUser($user);
-                    var_dump($user);
-                    if($newUser) echo "User created successfully!";
+
+                    echo "$isAdmin, $doesThrift";
+                    // create group member row(s) if user would participate
+                    if($doesThrift || !$isAdmin) {
+                        $userRow = $this->userRepo->findByEmail($email);
+                        foreach($groups as $groupId){
+                            $member = new GroupMember($userRow->getId(), (int)$groupId);
+                            $this->memberRepo->createGroupMember($member);
+                        }
+                    }
+                    if($newUser) {
+                        echo "<script>alert('$email account created successfully!')</script>";
+                    }
                 }
-                var_dump($errors);
-                var_dump($isAdmin, $doesThrift);
-                echo "<br />";
            }else{
-            $this->view('member/views/create');
+            //get all groups from db     
+               $groups = $this->groupRepo->findAll();
+               $assocGroups = [];
+               foreach($groups as $group){
+                   $assocGroups[$group->getName()] = $group->getId();
+               }
+
+            //redirect to create member page
+               $this->view('member/views/create', ['groups'=> $assocGroups]);
            }
+        }
+
+        public function logpay(){
+            echo "member/logpay";
         }
 
         public function logout(){
