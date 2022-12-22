@@ -9,7 +9,7 @@ const addErrorMessage = (message = "", parentSelector) => {
   parentElement.appendChild(errorSpan);
 };
 
-const getFormValues = () => {
+const getFormValues = (form) => {
   let formData = new FormData(form);
   formData = Object.fromEntries(formData.entries());
   return formData;

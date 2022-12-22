@@ -1,7 +1,7 @@
 const form = document.querySelector("form");
 const validateFields = () => {
   let isValid = true;
-  let formData = getFormValues();
+  let formData = getFormValues(form);
   const { email, password } = formData;
   if (!email) {
     addErrorMessage("Email is required", "div.email");

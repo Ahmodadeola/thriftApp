@@ -1,0 +1,13 @@
+input#find,
+input#set {
+  width: 100px;
+  height: 35px;
+  background-color: white;
+  color: purple;
+  border: 1px solid purple;
+  padding-left: 0;
+}
+
+input[name="submit"] {
+  margin-top: 2rem !important;
+}

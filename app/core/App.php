@@ -27,11 +27,17 @@
             }
 
             $this->param = $url? array_values($url) : [];
-            call_user_func_array([$this->controller, $this->method], $this->param);
+            call_user_func_array([$this->controller, $this->method], [$this->param, $this->query]);
 
         }
 
         public function parseUrl(){
+            if(count($_GET) > 1){
+               foreach($_GET as $key => $value){
+                if($key !== 'url') $this->query[$key] = $value;
+               }
+          
+            }
             if(isset($_GET['url'])){
                 $url = filter_var(rtrim($_GET['url'], '/'), FILTER_SANITIZE_URL);
                 $url = explode("/", $url);
@@ -39,5 +45,6 @@
             } else { 
                 return [""];
             }
+           
         }
     }

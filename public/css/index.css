@@ -20,20 +20,22 @@ main {
 
 .input-div,
 #group,
-input[type="submit"] {
+input[type="submit"],
+select {
   width: 80%;
   max-width: 400px;
   margin-inline: auto;
 }
 
-.input-div > span {
+.input-div span:last-child {
   font-size: 14px;
   color: red;
 }
 
 .input-div > input,
 #group,
-input[type="submit"] {
+input[type="submit"],
+select {
   width: 100%;
   height: 45px;
   outline: none;

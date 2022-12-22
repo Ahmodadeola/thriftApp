@@ -34,7 +34,7 @@ const handleParticipateSwitch = (e) => {
 };
 
 const handleGroupSelect = () => {
-  let formData = getFormValues();
+  let formData = getFormValues(form);
   const selectedGroups = Object.entries(formData).filter(([key, value]) =>
     key.toLowerCase().startsWith("group-")
   );
@@ -53,7 +53,7 @@ const form = document.querySelector("form");
 
 const validateFields = () => {
   let isValid = true;
-  let formData = getFormValues();
+  let formData = getFormValues(form);
   const {
     firstName,
     lastName,
