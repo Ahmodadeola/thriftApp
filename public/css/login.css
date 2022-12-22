@@ -13,3 +13,7 @@ form {
   height: 90%;
   text-align: center;
 }
+
+span {
+  float: left;
+}

@@ -44,6 +44,18 @@ class UserRepository {
         return $users;
     }
 
+    public function findEveryWithGroups(){
+        $sql = "SELECT CONCAT(firstName, ' ', lastName) AS fullName, email, createdAt, isAdmin,
+        GROUP_CONCAT(thriftGroup.name SEPARATOR ', ') AS groupNames
+        from groupMember, thriftGroup, user
+        where groupMember.groupId = thriftGroup.id AND groupMember.userId = user.id
+        GROUP BY userId";
+
+        $result = mysqli_query($this->connect, $sql);
+        $data = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        return $data;
+    }
+
     public function createUser($user){
         $firstName = $user->getFirstName();
         $lastName = $user->getLastName();

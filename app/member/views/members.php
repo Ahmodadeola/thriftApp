@@ -17,31 +17,29 @@
 <body>
     <?php require_once "../app/partials/header.php"?>
     <main class="flex w-full py-4">
-        <sectio class="w-3/5 mx-auto py-5">
+        <section class="w-3/5 mx-auto py-5 mt-[3rem]">
             <h1 class="text-center text-2xl text-[#A555EC] font-bold">All Group Members</h1>
             <table class="members">
                 <thead>
-                    <th>First Name</th>
-                    <th>Last Name</th>
+                    <th>Full Name</th>
                     <th>Email</th>
+                    <th>Groups</th>
                     <th>is Admin</th>
-                    <th>Thrift member</th>
                     <th>Date Created</th>
                 </thead>
                 <tbody>
                     <?php foreach($data['members'] as $member): ?>
                         <tr>
-                            <td><?=$member['firstName'] ?></td>
-                            <td><?=$member['lastName'] ?></td>
+                            <td><?=$member['fullName'] ?></td>
                             <td><?=$member['email'] ?></td>
-                            <td><?= $member['isAdmin'] ?></td>
-                            <td><?=$member['doesThrift'] ?></td>
-                            <td><?=$member['dateCreated'] ?></td>
+                            <td><?=$member['groupNames'] ?></td>
+                            <td><?= $member['isAdmin']? 'Yes':'No' ?></td>
+                            <td><?=$member['createdAt'] ?></td>
                         </tr>
                     <?php endforeach ?>
                 </tbody>
             </table>
-        </sectio>
+        </section>
     </main>
     <script src="/thriftapp/public/js/create.js"></script>
 </body>

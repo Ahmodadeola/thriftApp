@@ -80,6 +80,7 @@
             </form>
         </section>
     </main>
+    <script src="/thriftapp/public/js/index.js"></script>
     <script src="/thriftapp/public/js/create.js"></script>
 </body>
 </html>

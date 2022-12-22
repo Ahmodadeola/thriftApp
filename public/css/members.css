@@ -2,7 +2,7 @@ table.members {
   width: 100%;
   margin-top: 2rem;
   border-collapse: separate;
-  border-spacing: 0 8px;
+  border-spacing: 0 0.7rem;
 }
 
 table.members thead,
@@ -13,6 +13,7 @@ tr {
 
 th {
   text-align: left;
+  color: #64477e;
 }
 
 th,
@@ -26,4 +27,10 @@ td {
 
 tr {
   cursor: pointer;
+}
+
+tr:hover {
+  box-shadow: 4px 4px 5px 0px #e9e6e6, 4px -4px 5px 0px #e9e6e6;
+  height: calc(100% + 5px);
+  transition: all ease-out 0.2s;
 }

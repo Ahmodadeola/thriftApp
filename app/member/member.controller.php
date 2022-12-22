@@ -17,17 +17,7 @@ class Member extends Controller {
 
         public function index($name="default", $rest=""){
             $this->authenticate();
-            $members = $this->userRepo->findAll();
-            $allMembers = [];
-            foreach($members as $member){
-               array_push($allMembers, ['firstName'=>$member->getFirstName(), 
-               'lastName'=>$member->getLastName(), 
-               'email'=>$member->getEmail(), 
-               'isAdmin'=>$member->isAdmin()? 'Yes' : 'No', 
-               'doesThrift'=>$member->doesThrift()? 'Yes' : 'No', 
-               'dateCreated'=>$member->getDateCreated()
-            ]);
-            }
+            $allMembers = $this->userRepo->findEveryWithGroups();
             $this->view("member/views/members", ['members'=> $allMembers]);
         }
 
@@ -93,7 +83,7 @@ class Member extends Controller {
                         if($isAdmin){
                              $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                         if(!$password)  array_push($errors,  "Password is required");
-                        else if(strlen($password) < 7)  array_push($errors,  "Password must be min of 6 characters");
+                        else if(strlen($password) < 6)  array_push($errors,  "Password must be min of 6 characters");
            
                         }
                     }else{
@@ -121,6 +111,7 @@ class Member extends Controller {
                     }
                     if($newUser) {
                         echo "<script>alert('$email account created successfully!')</script>";
+                        header("Location: /thriftapp/public/member");
                     }
                 }
            }else{

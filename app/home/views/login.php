@@ -24,22 +24,22 @@
 
         <!-- Login form -->
         <section class="ml-[45vw] w-full h-full">
-            <form action="/thriftapp/public/home/login" method="post">
+            <form action="/thriftapp/public/home/login" method="post" onsubmit="return validateFields()">
                 <div class="form-inputs">
                     <p class="text-lg">Welcome Back!</p>
                  <h2 class="text-2xl font-bold text-[#5a185a]">Admin Login</h2>
-                 <?php if(isset($data['error'])): ?>
+                 <?php if(isset($data['errors'])): ?>
                     <div class="error">
-                        <p><?= $data['error'] ?></p>
+                        <p><?= join(", ", array_slice($data['errors'], 0, 2)) ?></p>
                     </div>
                  <?php endif ?>
-                <div class="input-div">
+                <div class="input-div email">
                     <label for="email">Email</label>
                     <input type="email" placeholder="john@doe.com" name="email" required>
                 </div>
-                <div class="input-div">
+                <div class="input-div password">
                     <label for="password">Password</label>
-                    <input type="password" name="password">
+                    <input type="password" name="password" required>
                 </div>
                 <input type="submit" value="Login" name="submit" >
                 </div>
@@ -47,5 +47,7 @@
             </form>
         </section>
     </main>
+    <script src="/thriftapp/public/js/index.js"></script>
+    <script src="/thriftapp/public/js/login.js"></script>
 </body>
 </html>

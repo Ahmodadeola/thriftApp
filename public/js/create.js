@@ -9,12 +9,6 @@ const groupsDiv = document.querySelector("#groups");
 const groupsWrapper = document.querySelector("#groups-wrapper");
 const groupValueInput = document.querySelector("#selected-groups");
 
-const getFormValues = () => {
-  let formData = new FormData(form);
-  formData = Object.fromEntries(formData.entries());
-  return formData;
-};
-
 // toggle password fields and participate checkbox when isAdmin checkbox is switched
 const handleAdminSwitch = (e) => {
   const adminvalue = isAdminEl.checked;
@@ -57,17 +51,6 @@ groupsWrapper.addEventListener("click", handleGroupSelect);
 const firstNameDiv = document.querySelector(".firstName");
 const form = document.querySelector("form");
 
-const addErrorMessage = (message = "", parentSelector) => {
-  const parentElement = document.querySelector(parentSelector);
-  const isSpan = parentElement.lastChild.localName === "span";
-  if (isSpan) {
-    parentElement.removeChild(parentElement.lastChild);
-  }
-  const errorSpan = document.createElement("span");
-  errorSpan.innerText = message;
-  parentElement.appendChild(errorSpan);
-};
-
 const validateFields = () => {
   let isValid = true;
   let formData = getFormValues();
@@ -98,11 +81,12 @@ const validateFields = () => {
     if (!password) {
       addErrorMessage("Password is required", ".input-div#password");
       isValid = false;
-    } else if (password.length < 7) {
+    } else if (password.length < 6) {
       addErrorMessage(
         "Password must be min of 6 characters",
         ".input-div#password"
       );
+      isValid = false;
     }
     if (password !== confirmPassword) {
       addErrorMessage(

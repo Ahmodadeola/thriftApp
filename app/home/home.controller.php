@@ -17,39 +17,41 @@
             $this->authenticate();
             // check for form submission
             if(isset($_POST['submit'])){
-                $emailErr = $passwordErr = "";
+                $errors= [];
 
                 // escape and validate email 
                 if(isset($_POST['email'])){
                     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
                     if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
-                        $emailErr = "Provide a valid email";
+                      array_push($errors, "Provide a valid email");
                     }
                 }else{
-                    $emailErr = "Provide a valid email";
+                    array_push($errors, "Provide a valid email");
                 }
 
                   // escape password 
                 if(isset($_POST['password'])){
                     $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                    if(!$password){
+                        array_push($errors, "Password cannot be empty");
+                    }else if(strlen($password) < 6){
+                        array_push($errors, "Password length can't be less than 6");
+                    }
                 }else{
-                    $passwordErr = "Password cannot be empty";
+                    array_push($errors, "Password cannot be empty");
                 }
 
-                echo "$emailErr" . " $passwordErr";
-                if($emailErr || $passwordErr){
-                    $this->view('home/views/login', ['error'=> 'Provide valid email and password']);
-  
+                if(count($errors) > 0){
+                    $this->view('home/views/login', ['errors'=> $errors]);
                 }
                 // find the user with login credentials
                 $user = $this->userRepo->findByEmail($email);
-                var_dump($user->getPassword());
                 $isValidUser = $user? password_verify($password, $user->getPassword()) : false;
 
 
                 // return to login if user is not found
                 if(!$isValidUser){
-                    $this->view('home/views/login', ['error'=> 'Incorrect email or password']);
+                    $this->view('home/views/login', ['errors'=> ['Incorrect email or password']]);
                 }else{
                     session_start();
                     $_SESSION['email'] = $email;
