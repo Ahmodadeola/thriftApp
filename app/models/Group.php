@@ -6,12 +6,14 @@
         private  $dateCreated;
         private  $name;
 
-        public function __construct(string $name, string $thriftAmount)
+        public function __construct(string $name, string $thriftAmount, int $currentNoMembers=0, 
+                                    int $id=null, string $dateCreated="")
         {
             $this->thriftAmount = $thriftAmount;
             $this->name = $name;
-            $this->currentNoMembers = 0;
-        
+            $this->currentNoMembers = $currentNoMembers;
+            $this->id = $id;
+            $this->dateCreated = $dateCreated;
         }
 
         public function setId(int $id){

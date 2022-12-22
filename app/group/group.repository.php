@@ -14,7 +14,7 @@ class GroupRepository {
         $group = null;
         if(!empty($data)) {
             $row = $data['0'];
-            $group = new Group($row['name'], $row['thriftAmount']);
+            $group = new Group($row['name'], $row['thriftAmount'], $row['currentNoMembers'], $row['id'], $row['dateCreated']);
         }
         return $group;
     }
@@ -26,9 +26,7 @@ class GroupRepository {
         $groups = [];
         if(!empty($data)) {
             foreach($data as $row){
-                $group = new Group($row['name'], $row['thriftAmount']);
-                $group->setId($row['id']);
-                $group->setDateCreated($row['dateCreated']);
+                $group = new Group($row['name'], $row['thriftAmount'], $row['currentNoMembers'], $row['id'], $row['dateCreated']);
                 array_push($groups, $group);
             }
         }
@@ -39,12 +37,21 @@ class GroupRepository {
     public function createGroup($group){
         $name = $group->getFirstName();
         $thriftAmount = $group->getFirstName();
-
-
         $sql = "INSERT INTO thriftGroup (name, thriftAmount)
                  VALUES 
                 ('$name', '$thriftAmount')";
         $result = mysqli_query($this->connect, $sql);
+        return $result;
+    }
+
+    public function incrementNoOfMembers(int $id){
+        $sql = "UPDATE thriftGroup
+        SET currentNoMembers = currentNoMembers + 1
+        WHERE id = $id
+        ";
+        $result = mysqli_query($this->connect, $sql);
+        // $data = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        var_dump($result);
         return $result;
     }
 }

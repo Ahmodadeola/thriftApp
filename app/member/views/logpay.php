@@ -15,7 +15,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-    <!-- <?php require_once "../app/partials/header.php"?> -->
+    <?php require_once "../app/partials/header.php"?>
     <main class="flex w-full py-4">
         <!-- Log pay form -->
         <section class="mx-auto w-2/3 h-full mt-[2rem]">
@@ -34,7 +34,9 @@
                      <div class="input-div name">
                         <label for="name">Find member</label>
                         <input type="text" value="<?= isset($data['key'])? $data['key'] :''?>"  placeholder="keyword" name="key" required>
-                        <input type="submit" value="find" class="" id="find">
+                        <div>
+                            <input type="submit" value="find" class="" id="find">
+                        </div>
                     </div>
         </form>
 
@@ -79,9 +81,9 @@
                     <?php endif ?>
                     </div>
                 </div>
-                <div class="input-div">
+                <div class="input-div mt-[1rem]">
                         <label for="paymentDate">Payment Date</label>
-                        <input type="date" name="paymentDate" />
+                        <input type="date" name="paymentDate" required/>
                      <input type="submit" value="Submit" name="submit">
                 </div>
                 <!-- Just used to send some form state to server, doesn't need to display, it's value is set in the js file-->

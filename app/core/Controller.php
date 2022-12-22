@@ -14,4 +14,10 @@ class Controller {
         require_once("../app/$page.php");
     }
 
+    public function authenticate(){
+        session_start();
+        $isLoggedIn = isset($_SESSION['email']);
+        if(!$isLoggedIn)  header("Location: /thriftapp/public");
+    }
+
 }

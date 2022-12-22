@@ -21,12 +21,19 @@ Class ThriftRepository {
         return $thrifts;
     }
 
+    public function findAllWithMember(){
+        $sql = "SELECT * FROM thrift";
+        $result = mysqli_query($this->connect, $sql);
+        $data = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        return $data;
+    }
+
     public function createThrift($thrift){
         $memberId = $thrift->getMemberId();
         $groupId =  $thrift->getGroupId();
         $paymentDate = $thrift->getPaymentDate();
          
-        $sql = "INSERT INTO user (memberId, groupId, paymentDate)
+        $sql = "INSERT INTO thrift (memberId, groupId, paymentDate)
         VALUES ('$memberId', '$groupId', '$paymentDate')";
         $result = mysqli_query($this->connect, $sql);
         return $result;

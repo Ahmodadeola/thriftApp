@@ -3,6 +3,10 @@ const groupsWrapper = document.querySelector("#groups-wrapper");
 const groupValueInput = document.querySelector("#selected-groups");
 const memberInput = document.querySelector("#selected-member");
 
+const datePicker = document.querySelector("input[type=date]");
+const today = new Date();
+datePicker.max = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
+
 const handleGroupSelect = () => {
   let formData = getFormValues(form);
   const selectedGroups = Object.entries(formData).filter(([key, value]) =>
@@ -30,11 +34,16 @@ const validateFields = () => {
 
   // assign individul form input errors
   if (!member) {
-    // addErrorMessage("Search for members and select option", "#member");
+    const errorSet = addErrorMessage(
+      "Search for members and select option",
+      "#member"
+    );
+    if (!errorSet)
+      addErrorMessage("Search for members and select option", ".name");
     isValid = false;
   }
   if (!groups) {
-    // addErrorMessage("Select a group", "#groups-wrapper");
+    addErrorMessage("Select a group", "#groups-wrapper");
     isValid = false;
   }
 

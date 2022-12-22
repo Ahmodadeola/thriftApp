@@ -18,6 +18,7 @@ class Member extends Controller {
             $this->memberRepo = new GroupMemberRepository($connect);
             $this->groupRepo = new GroupRepository($connect);
             $this->thriftRepo = new ThriftRepository($connect);
+            $this->groups = $this->groupRepo->findAll();
         }
 
         public function index($name="default", $rest=""){
@@ -28,6 +29,11 @@ class Member extends Controller {
 
         public function create(){
             $this->authenticate();
+            $refinedGroups = [];
+            foreach($this->groups as $group){
+                if($group->getCurrentNoMembers() <= MAX_GROUP_CAPACITY) $refinedGroups[$group->getName()] = $group->getId();
+            }
+
            if(isset($_POST['submit'])){
                 $errors = [];
 
@@ -97,21 +103,20 @@ class Member extends Controller {
                 }
 
                 // return to create page if form contains error
-                if(count($errors) > 0) $this->view('member/views/create', ['errors'=> $errors]);
+                if(count($errors) > 0) $this->view('member/views/create', ['errors'=> $errors, 'groups'=> $refinedGroups]);
                 else{
                     // create a new user row
                     $args = [$firstName, $lastName, $email, $password, $isAdmin, $doesThrift];
-                    var_dump($args);
                     $user= $this->model('User', $args);
                     $newUser = $this->userRepo->createUser($user);
 
-                    echo "$isAdmin, $doesThrift";
                     // create group member row(s) if user would participate
                     if($doesThrift || !$isAdmin) {
                         $userRow = $this->userRepo->findByEmail($email);
                         foreach($groups as $groupId){
                             $member = new GroupMember($userRow->getId(), (int)$groupId);
                             $this->memberRepo->createGroupMember($member);
+                            $this->groupRepo->incrementNoOfMembers((int)$groupId);
                         }
                     }
                     if($newUser) {
@@ -120,15 +125,8 @@ class Member extends Controller {
                     }
                 }
            }else{
-            //get all groups from db     
-               $groups = $this->groupRepo->findAll();
-               $assocGroups = [];
-               foreach($groups as $group){
-                   $assocGroups[$group->getName()] = $group->getId();
-               }
-
             //redirect to create member page
-               $this->view('member/views/create', ['groups'=> $assocGroups]);
+               $this->view('member/views/create', ['groups'=> $refinedGroups]);
            }
         }
 
@@ -180,11 +178,12 @@ class Member extends Controller {
                     foreach($groups as $groupId){
                         $thriftObj = new Thrift((int)$memberId, (int)$groupId, $paymentDate);
                         $thriftCreated = $this->thriftRepo->createThrift($thriftObj);
-                        $hasError = $thriftCreated;
+                        $hasError = !$thriftCreated && $hasError;
+                        var_dump($thriftCreated);
                     }
                     if($hasError) echo "Some error occured with some items";
                     else{
-                        echo "Thrift created succesfully!";
+                        header("Location: /thriftapp/public");
                     }
                 }
 

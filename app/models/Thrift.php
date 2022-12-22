@@ -10,7 +10,7 @@
         public function __construct(int $memberId, int $groupId, string $paymentDate, $id=null, $createdAt='')
         {
             $this->id = $id;
-            $this->memberId = $$memberId;
+            $this->memberId = $memberId;
             $this->groupId = $groupId;
             $this->paymentDate = $paymentDate;
             $this->createdAt = $createdAt;

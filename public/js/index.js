@@ -1,5 +1,7 @@
 const addErrorMessage = (message = "", parentSelector) => {
   const parentElement = document.querySelector(parentSelector);
+  console.log({ parentSelector });
+  if (!parentElement) return;
   const isSpan = parentElement.lastChild.localName === "span";
   if (isSpan) {
     parentElement.removeChild(parentElement.lastChild);

@@ -68,7 +68,7 @@ class GroupMemberRepository{
     }
 
     public function findByNameSubstring(string $substring){
-        $sql = "SELECT userId, CONCAT(firstName, ' ', lastName) AS fullName, email, createdAt, isAdmin,
+        $sql = "SELECT memberId, CONCAT(firstName, ' ', lastName) AS fullName, email, createdAt, isAdmin,
         GROUP_CONCAT(thriftGroup.name SEPARATOR ', ') AS groupNames
         from groupMember, thriftGroup, user
         where groupMember.groupId = thriftGroup.id AND groupMember.userId = user.id 

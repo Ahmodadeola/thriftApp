@@ -52,7 +52,7 @@
                 <div class="input-div" id="groups">
                     <p for="group" class="text-gray-600">Select Group(s)</p>
                     <div class="grid grid-cols-3 gap-y-2 mt-3" id="groups-wrapper">
-                    <?php foreach($data['groups']=[] as $label=>$value): ?>
+                    <?php foreach($data['groups'] as $label=>$value): ?>
                         <div>
                             <input type="checkbox" name="<?=$label?>" class="group-class" value="<?=$value?>"/>
                             <label for="<?=$label?>" class="text-[#828282]"><?=$label?></label>
