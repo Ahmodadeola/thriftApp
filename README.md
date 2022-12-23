@@ -6,7 +6,7 @@ HTML, CSS, JS and PHP.
 ## Local Setup
 - Move entire project folder into the xampp htdocs folder
 - open constants.php at app/utils and edit the database constants values with your dbms corresponding details.
--  make sure the db details provided are those of used by xampp mysql server.
+- make sure the db details provided are those used by your local xampp mysql server.
 - Create 'thriftApp' database using phymyadmin or any tool that can help with the db creation.
 - using phpmyadmin or any tool of your choice, import the thriftApp.sql file in the base folder of the app into the thriftApp database.
 - try the url 'http://localhost/thriftApp/public' and see if there's no error generated
