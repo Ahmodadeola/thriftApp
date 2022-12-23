@@ -122,7 +122,6 @@ class Member extends Controller {
                         }
                     }
                     if($newUser) {
-                        echo "<script>alert('$email account created successfully!')</script>";
                         header("Location: /thriftapp/public/member");
                     }
                 }

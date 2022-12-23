@@ -79,7 +79,8 @@ Class ThriftRepository {
         ON user.id = groupMember.userId
         INNER JOIN thriftGroup
         ON thriftGroup.id = groupMember.groupId
-        WHERE MONTH(thriftLog.paymentDate) != MONTH(CURRENT_DATE())        
+        WHERE MONTH(thriftLog.paymentDate) != MONTH(CURRENT_DATE()) 
+        ORDER BY  thriftLog.paymentDate DESC      
         ";
 
         $result = mysqli_query($this->connect, $sql);

@@ -13,8 +13,8 @@
         $amount = $member['amount'];
         $groupName = $member['groupName'];
 
-        $subject = '$groupName Thrift contribution reminder';
-        $to = 'thriftyrec@yopmail.com';
+        $subject = "$groupName Thrift contribution reminder";
+        $to = $member['email'];
 
         $body = "Hi there, 
         just a friendly reminder that your thrift contribution with monthly quota of $amount is due. 

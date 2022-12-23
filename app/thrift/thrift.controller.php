@@ -32,6 +32,7 @@ require_once "../app/models/Thrift.php";
         }
 
         public function remind(){
+            $this->authenticate();
             require_once "../app/cronJobs/thriftReminder.php";
         }
 
