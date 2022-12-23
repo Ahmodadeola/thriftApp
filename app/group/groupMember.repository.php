@@ -8,15 +8,17 @@ class GroupMemberRepository{
     }
     
     public function findById(int $id){
-        $sql = "SELECT * FROM groupmember WHERE groupmember.id = '$id'";
+        $sql = "SELECT * FROM groupMember WHERE groupmember.id = '$id'";
         $result = mysqli_query($this->connect, $sql);
         $data = mysqli_fetch_all($result, MYSQLI_ASSOC);
-        $group = null;
+        $member = null;
         if(!empty($data)) {
             $row = $data['0'];
-            $group = new Group($row['name'], $row['thriftAmount']);
+            $member = new GroupMember($row['userId'], $row['groupId']);
+            $member->setId($row['id']);
+            $member->setDateJoined($row['dateJoined']);
         }
-        return $group;
+        return $member;
     }
 
     public function findByUserId(int $userId){
@@ -55,12 +57,28 @@ class GroupMemberRepository{
         return $members;
     }
 
+    public function findByGroupIdAndUserId(int $groupId, int $userId){
+        $sql = "SELECT * FROM groupMember WHERE groupMember.groupId = '$groupId'
+                AND groupMember.userId = '$userId'";
+        $result = mysqli_query($this->connect, $sql);
+        $data = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        $member = null;
+        if(!empty($data)) {
+            $row = $data['0'];
+            $member = new GroupMember($row['userId'], $row['groupId']);
+            $member->setId($row['id']);
+            $member->setDateJoined($row['dateJoined']);
+        }
+        return $member;
+    }
+
     public function findEveryWithGroups(){
         $sql = "SELECT userId, CONCAT(firstName, ' ', lastName) AS fullName, email, createdAt, isAdmin,
         GROUP_CONCAT(thriftGroup.name SEPARATOR ', ') AS groupNames
         from groupMember, thriftGroup, user
         where groupMember.groupId = thriftGroup.id AND groupMember.userId = user.id
-        GROUP BY userId";
+        GROUP BY userId
+        ORDER BY createdAt DESC";
 
         $result = mysqli_query($this->connect, $sql);
         $data = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -68,18 +86,18 @@ class GroupMemberRepository{
     }
 
     public function findByNameSubstring(string $substring){
-        $sql = "SELECT memberId, CONCAT(firstName, ' ', lastName) AS fullName, email, createdAt, isAdmin,
+        $sql = "SELECT userId, CONCAT(firstName, ' ', lastName) AS fullName, email, createdAt, isAdmin,
         GROUP_CONCAT(thriftGroup.name SEPARATOR ', ') AS groupNames
         from groupMember, thriftGroup, user
         where groupMember.groupId = thriftGroup.id AND groupMember.userId = user.id 
         AND LOWER(CONCAT(firstName, ' ', lastName)) LIKE '%$substring%'
-        GROUP BY userId";
+        GROUP BY userId
+        ORDER BY createdAt DESC";
 
         $result = mysqli_query($this->connect, $sql);
         $data = mysqli_fetch_all($result, MYSQLI_ASSOC);
         return $data;
     }
-
 
 
     public function createGroupMember($member){

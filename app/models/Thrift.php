@@ -1,5 +1,5 @@
 <?php
-    class Thrift{
+    class ThriftLog {
         private  $id;
         private  $memberId;
         private  $groupId;

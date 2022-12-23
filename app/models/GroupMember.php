@@ -16,7 +16,7 @@
             $this->id = $id;
         }
 
-        public function setDateJoined(DateTime $dateJoined){
+        public function setDateJoined(string $dateJoined){
             $this->dateJoined = $dateJoined;
         }
 

@@ -41,7 +41,7 @@
         </form>
 
         <?php if(isset($data['searchResults'])): ?>
-            <form action="/thriftapp/public/member/logpay">
+            <form action="/thriftapp/public/thrift/logpay">
                  <!-- this hidden input is neeeded to maintain the exisiting url queries after form has been sent -->
                 <input type="text" value="<?= isset($data['key'])? $data['key'] :''?>"  class="hidden" name="key" required>
                  <div class="input-div my-[2rem]" id="member">
@@ -63,7 +63,7 @@
 
          <div class="form-inputs mt-5">    
             <!-- Thrift form -->
-            <form id="thriftpay" method="POST" action="/thriftapp/public/member/logpay" onsubmit="return validateFields()">
+            <form id="thriftpay" method="POST" action="/thriftapp/public/thrift/logpay" onsubmit="return validateFields()">
                 <div class="input-div" id="groups">
                     <div id="groups-wrapper">
                         <?php if(count($data['groups']) > 0): ?>

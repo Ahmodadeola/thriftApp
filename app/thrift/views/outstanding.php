@@ -20,7 +20,7 @@
     <?php require_once "../app/partials/header.php"?>
     <main class="flex w-full py-4">
         <section class="w-3/5 mx-auto py-5 mt-[3rem]">
-            <h1 class="text-center text-2xl text-[#A555EC] font-bold">All Thrift Logs</h1>
+            <h1 class="text-center text-2xl text-[#A555EC] font-bold">Outstanding Logs</h1>
             <table class="members">
                 <thead>
                     <th>Full Name</th>
@@ -32,11 +32,11 @@
                             <span><</span>
                             <span>></span>
                         </div>
-                         <span>Payment Date</span>
+                         <span>Last Payment Date</span>
                     </div>    
                    </th>
                     <th>is Admin</th>
-                    <th>Date Logged</th>
+                    <!-- <th>Date Logged</th> -->
                 </thead>
                 <tbody>
                     <?php foreach($data['thrifts'] as $member): ?>
@@ -46,7 +46,6 @@
                             <td><?=$member['groupName'] ?></td>
                             <td><?=$member['paymentDate'] ?></td>
                             <td><?= $member['isAdmin']? 'Yes':'No' ?></td>
-                            <td><?=$member['createdAt'] ?></td>
                         </tr>
                     <?php endforeach ?>
                 </tbody>

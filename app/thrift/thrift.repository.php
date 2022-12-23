@@ -14,7 +14,7 @@ Class ThriftRepository {
         $thrifts = [];
         if(!empty($data)) {
             foreach($data as $row){
-                $thrift = new User($row['memberId'], $row['groupId'], $row['paymentDate'], $row['id'], $row['createdAt']);
+                $thrift = new ThriftLog($row['memberId'], $row['groupId'], $row['paymentDate'], $row['id'], $row['createdAt']);
                 array_push($thrifts, $thrift);
             }
         }
@@ -22,7 +22,15 @@ Class ThriftRepository {
     }
 
     public function findAllWithMember(){
-        $sql = "SELECT * FROM thrift";
+        $sql = "SELECT thrift.id, thrift.memberId, fullName, email, groupName, paymentDate, createdAt, isAdmin
+        FROM thrift
+        INNER JOIN (
+            SELECT isAdmin, groupMember.id as memberId, name AS groupName, email, CONCAT(firstName, ' ', lastName) AS fullName
+            FROM user, groupMember, thriftGroup 
+            WHERE user.id = groupMember.userId AND thriftGroup.id = groupMember.groupId
+        ) AS userMember
+        ON thrift.memberId = userMember.memberId
+        ORDER BY paymentDate DESC, createdAt DESC";
         $result = mysqli_query($this->connect, $sql);
         $data = mysqli_fetch_all($result, MYSQLI_ASSOC);
         return $data;
@@ -37,6 +45,48 @@ Class ThriftRepository {
         VALUES ('$memberId', '$groupId', '$paymentDate')";
         $result = mysqli_query($this->connect, $sql);
         return $result;
-
     }
+
+    public function findLatestMemberLogs(){
+        $sql =  $sql = "SELECT thrift.id, thrift.memberId, fullName, email, groupName, paymentDate, createdAt, isAdmin
+        FROM thrift
+        INNER JOIN (
+            SELECT isAdmin, groupMember.id as memberId, name AS groupName, email, CONCAT(firstName, ' ', lastName) AS fullName
+            FROM user, groupMember, thriftGroup 
+            WHERE user.id = groupMember.userId AND thriftGroup.id = groupMember.groupId
+        ) AS userMember
+        ON thrift.memberId = userMember.memberId
+        ORDER BY paymentDate DESC, createdAt DESC";
+
+        $result = mysqli_query($this->connect, $sql);
+        $data = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+        return $data;
+    }
+
+    public function findOutstandings(){
+        $sql = "SELECT memberId, email, isAdmin, CONCAT(firstName, ' ', lastName) AS fullName,
+         thriftGroup.name as groupName, thriftGroup.thriftAmount as amount, 
+         thriftLog.memberId, thriftLog.paymentDate
+        FROM groupMember
+        INNER JOIN (
+          SELECT memberId, MAX(paymentDate) AS paymentDate
+          FROM thrift
+          GROUP BY memberId
+        ) AS thriftLog
+        ON thriftLog.memberId = groupMember.id
+        INNER JOIN user
+        ON user.id = groupMember.userId
+        INNER JOIN thriftGroup
+        ON thriftGroup.id = groupMember.groupId
+        WHERE MONTH(thriftLog.paymentDate) != MONTH(CURRENT_DATE())        
+        ";
+
+        $result = mysqli_query($this->connect, $sql);
+        $data = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+        return $data;
+    }
+
+    
 }

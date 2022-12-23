@@ -5,7 +5,9 @@ const memberInput = document.querySelector("#selected-member");
 
 const datePicker = document.querySelector("input[type=date]");
 const today = new Date();
-datePicker.max = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
+datePicker.max = `${today.getFullYear()}-${
+  today.getMonth() + 1
+}-${today.getDate()}`;
 
 const handleGroupSelect = () => {
   let formData = getFormValues(form);

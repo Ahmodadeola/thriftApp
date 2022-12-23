@@ -4,6 +4,8 @@ require_once "../app/group/groupMember.repository.php";
 require_once "../app/models/GroupMember.php";
 require_once "../app/models/Thrift.php";
 require_once "../app/thrift/thrift.repository.php";
+require_once "../app/utils/constants.php";
+
 
 class Member extends Controller {
         private $userRepo;
@@ -31,7 +33,7 @@ class Member extends Controller {
             $this->authenticate();
             $refinedGroups = [];
             foreach($this->groups as $group){
-                if($group->getCurrentNoMembers() <= MAX_GROUP_CAPACITY) $refinedGroups[$group->getName()] = $group->getId();
+                if($group->getCurrentNoMembers() < MAX_GROUP_CAPACITY) $refinedGroups[$group->getName()] = $group->getId();
             }
 
            if(isset($_POST['submit'])){
@@ -130,91 +132,7 @@ class Member extends Controller {
            }
         }
 
-        public function logpay($param=[], $query=[]){
-           
-            $this->authenticate();
-            $members = $this->memberRepo->findEveryWithGroups();
-            $groups = $this->groupRepo->findAll();
-            $assocGroups = [];
-           
-            if(isset($_POST['submit'])){
-                var_dump($_POST);
-                $errors = [];
-
-                if(isset($_POST['member'])){
-                    $memberId = filter_input(INPUT_POST, 'member', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-                    if(empty($memberId) || $memberId < 0){
-                        array_push($errors, 'Member is required');
-                    }
-                }else{
-                    array_push($errors, 'Member is required');
-                }
-
-                if(isset($_POST['groups'])){
-                    $groups = filter_input(INPUT_POST, 'groups', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-                    if(!$groups) array_push($errors,  "Provide thrift group(s)");
-                    else{
-                         $groups = array_filter(explode(',', $groups), function($group) {
-                                        return !empty($group);
-                                    });  
-                        if(count($groups) === 0) array_push($errors,  "Provide thrift group(s)");
-                    }
-                }else{
-                    array_push($errors, 'Member group(s) is required');
-                }
-
-                if(isset($_POST['paymentDate'])){
-                    $paymentDate = filter_input(INPUT_POST, 'paymentDate', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-                    if(!$paymentDate) array_push($errors, 'Pyment date is required');
-                }else{
-                    array_push($errors, 'Payment date is required');
-                }
-
-                if(count($errors) >0 ){
-                    $this->view("member/views/logpay", ['errors'=>$errors, 'groups'=> []]);
-                }else{
-                    // create thrift record for each of the member's group
-                    $hasError = false;
-                    foreach($groups as $groupId){
-                        $thriftObj = new Thrift((int)$memberId, (int)$groupId, $paymentDate);
-                        $thriftCreated = $this->thriftRepo->createThrift($thriftObj);
-                        $hasError = !$thriftCreated && $hasError;
-                        var_dump($thriftCreated);
-                    }
-                    if($hasError) echo "Some error occured with some items";
-                    else{
-                        header("Location: /thriftapp/public");
-                    }
-                }
-
-            }else if(isset($_GET['key'])){
-                $key = filter_var($_GET['key'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-                $memberResults = $this->memberRepo->findByNameSubstring($key);
-                $contextData = ['members'=> $members, 'groups'=> $assocGroups, 
-                'searchResults'=> $memberResults, 'key'=> $key];
-
-                if(isset($_GET['member'])){
-                    $userId = filter_input(INPUT_GET, 'member', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-                    if(!empty($userId))  {
-                        $memberRow = array_find($members, function($member) use ($userId){
-                                            return $member['userId'] === $userId;
-                                        });
-                    foreach($groups as $group){
-                        $name= $group->getName();
-                        if(str_contains($memberRow['groupNames'], $name)) {
-                            $assocGroups[$name] = $group->getId();
-                        }
-                    }
-                    $contextData['member'] = $userId;
-                    $contextData['groups'] = $assocGroups;
-                    
-                }
-                }
-                 $this->view("member/views/logpay", $contextData);
-            }else{
-                $this->view("member/views/logpay", ['members'=> $members, 'groups'=> $assocGroups]);
-            }
-        }
+        
 
         public function logout(){
             session_start();

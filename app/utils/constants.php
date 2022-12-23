@@ -6,4 +6,4 @@
      define('DB_DATABASE', 'thriftApp');
 
      // others
-     define('MAX_GROUP_CAPACITY', 3);
+     define('MAX_GROUP_CAPACITY', 12);
